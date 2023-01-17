@@ -1,0 +1,14 @@
+{
+  "labels": {
+    "young": ["Y"],
+    "old": ["O"],
+    "none": ["N"]
+  },
+  "controls": {
+    "back": ["BACK"],
+    "next": ["SPACE"],
+    "quit": ["Q", "ESC"]
+  },
+  "data": "data/reduced_coco",
+  "out": "out/annotations.csv"
+}
