@@ -5,10 +5,11 @@ Tool for quick image annotation.
 ## Setup
 
 1. Download the repository.
-2. Create an environment (optional):
+2. (Optional) Create an environment and activate it:
 
 ```bash
 python -m venv venv
+source venv/bin/activate
 ```
 
 3. Install the dependencies:
