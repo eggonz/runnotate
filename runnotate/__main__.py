@@ -67,7 +67,7 @@ def color_hex2bgr(hex_):
 
 
 class Config:
-    def __init__(self, path, *, data='', out=''):
+    def __init__(self, path, *, data='', out='', filter_unlabeled=False):
         with open(path, 'r') as file:
             config_file = json.load(file)
 
@@ -89,6 +89,7 @@ class Config:
         self._data = config_file['data'] if not data else data
         self._data = self._data.rstrip('/')
         self._out = config_file['out'] if not out else out
+        self._filter_unlabeled = filter_unlabeled
 
     @property
     def data(self):
@@ -97,6 +98,10 @@ class Config:
     @property
     def out(self):
         return self._out
+
+    @property
+    def filter_unlabeled(self):
+        return self._filter_unlabeled
 
     @property
     def label_keys(self):
@@ -129,16 +134,17 @@ class SaveFile:
     def __init__(self, config):
         self._filename = re.sub(r'\.[^.]*$', '.sav', config.out)
 
-        self.stamp = 0
-        self.load()
+        self._stamp = 0
+        self._resume_stamp = not config.filter_unlabeled
 
-    def save(self):
-        save_info = {
-            'stamp': self.stamp
-        }
+    @property
+    def stamp(self):
+        return self._stamp if self._resume_stamp else 0
 
-        with open(self._filename, 'w') as save_file:
-            json.dump(save_info, save_file)
+    @stamp.setter
+    def stamp(self, value):
+        if self._resume_stamp:
+            self._stamp = value
 
     def load(self):
         try:
@@ -147,7 +153,15 @@ class SaveFile:
         except FileNotFoundError:
             save_info = {}
 
-        self.stamp = int(save_info.get('stamp', 0))
+        self._stamp = int(save_info.get('stamp', 0))
+
+    def save(self):
+        save_info = {
+            'stamp': self._stamp
+        }
+
+        with open(self._filename, 'w') as save_file:
+            json.dump(save_info, save_file)
 
 
 def get_parser():
@@ -158,6 +172,8 @@ def get_parser():
                         help='path to directory containing images, overrides value in config')
     parser.add_argument("--out", default='', type=str,
                         help='output csv file, overrides value in config')
+    parser.add_argument("--filter_unlabeled", action='store_true',
+                        help='with this flag, only the images that have not been labeled so far will appear')
     return parser
 
 
@@ -167,10 +183,9 @@ def load():
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
-    config = Config(args.config, data=args.data, out=args.out)
+    config = Config(args.config, data=args.data, out=args.out, filter_unlabeled=args.filter_unlabeled)
     sav = SaveFile(config)
-
-    img_list = [file for file in sorted(os.listdir(config.data)) if re.match(r'^\d+\.[^.]*$', file)]
+    sav.load()
 
     if not os.path.exists(config.out):
         save_dir = config.out.rsplit('/', maxsplit=1)[0]
@@ -179,6 +194,14 @@ def load():
         df = pd.DataFrame(columns=['label'])
     else:
         df = pd.read_csv(config.out, index_col='id')
+
+    img_list = []
+    for file in sorted(os.listdir(config.data)):
+        m = re.match(r'^(?P<img_id>\d+)\.[^.]*$', file)
+        if m:
+            if args.filter_unlabeled and int(m.group('img_id')) in df.index:
+                continue
+            img_list.append(file)
 
     print('Loaded!')
     return config, sav, img_list, df
