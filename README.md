@@ -50,14 +50,22 @@ The file `config.json` contains the configuration for the task. It has the follo
   "controls": {
     "back": [],
     "next": [],
-    "quit": []
+    "quit": [],
+    "delete": []
   },
   "data": "",
   "out": ""
 }
 ```
 
-Each of the labels contains a list of the keys for each class. A color representation is specified for annotation visualization. The necessary controls are also specified with their corresponding keys.
+Each of the labels contains a list of the keys for each class. A color representation is specified for annotation visualization.
+
+The necessary controls are also specified with their corresponding keys:
+
+- `back`: return to previous image
+- `next`: skip current image and move to next image
+- `quit`: finish, save and close
+- `delete`: clear the label given to the current image
 
 The data and output paths can be defined here. If any of the values is specified when running the command in terminal, the value in `config.json` will be ignored.
 
@@ -96,7 +104,8 @@ A `sav` file will be created in the same directory; it contains save information
       "controls": {
         "back": ["Backspace"],
         "next": ["Spacebar"],
-        "quit": ["q", "Esc"]
+        "quit": ["q", "Esc"],
+        "delete": ["d"]
       },
       "data": "data/reduced_coco_1000",
       "out": "out/annotations.csv"

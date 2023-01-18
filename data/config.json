@@ -16,7 +16,8 @@
   "controls": {
     "back": ["Backspace"],
     "next": ["Spacebar"],
-    "quit": ["q", "Esc"]
+    "quit": ["q", "Esc"],
+    "delete": ["d"]
   },
   "data": "data/reduced_coco_1000",
   "out": "out/annotations.csv"

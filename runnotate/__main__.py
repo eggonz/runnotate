@@ -107,6 +107,10 @@ class Config:
         return self._control_keys.get('quit', -1)
 
     @property
+    def delete_keys(self):
+        return self._control_keys.get('delete', -1)
+
+    @property
     def next_keys(self):
         return self._control_keys.get('next', -1)
 
@@ -222,6 +226,8 @@ def run(config, sav, img_list, df):
             i -= 1
         elif key in config.next_keys:
             i += 1
+        elif key in config.delete_keys:
+            df = df.drop(index=img_id)
         elif key in config.label_keys:
             label = config.get_key_label(key)
             df.loc[img_id] = label
