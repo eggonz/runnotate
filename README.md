@@ -70,21 +70,21 @@ Example `config.json`:
 ```json
 {
   "labels": {
-    "young": ["Y"],
-    "old": ["O"],
-    "none": ["N"]
+    "young": ["y"],
+    "old": ["o"],
+    "none": ["n"]
   },
   "controls": {
-    "back": ["BACK"],
-    "next": ["SPACE"],
-    "quit": ["Q", "ESC"]
+    "back": ["Backspace"],
+    "next": ["Spacebar"],
+    "quit": ["q", "Esc"]
   },
-  "data": "data/reduced_coco",
+  "data": "data/reduced_coco_1000",
   "out": "out/annotations.csv"
 }
 ```
 
-Example output:
+Example output csv:
 
 ```csv
 ,id, label
