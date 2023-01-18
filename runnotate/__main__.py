@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import re
+from random import shuffle
 
 import cv2
 import pandas as pd
@@ -100,10 +101,6 @@ class Config:
         return self._out
 
     @property
-    def filter_unlabeled(self):
-        return self._filter_unlabeled
-
-    @property
     def label_keys(self):
         return self._int2label.keys()
 
@@ -131,19 +128,20 @@ class Config:
 
 
 class SaveFile:
-    def __init__(self, config):
+    def __init__(self, config, resume=True):
         self._filename = re.sub(r'\.[^.]*$', '.sav', config.out)
 
         self._stamp = 0
-        self._resume_stamp = not config.filter_unlabeled
+        self._resume = resume
+        self.load()
 
     @property
     def stamp(self):
-        return self._stamp if self._resume_stamp else 0
+        return self._stamp if self._resume else 0
 
     @stamp.setter
     def stamp(self, value):
-        if self._resume_stamp:
+        if self._resume:
             self._stamp = value
 
     def load(self):
@@ -174,6 +172,8 @@ def get_parser():
                         help='output csv file, overrides value in config')
     parser.add_argument("--filter_unlabeled", action='store_true',
                         help='with this flag, only the images that have not been labeled so far will appear')
+    parser.add_argument("--shuffle", action='store_true',
+                        help='with this flag, images are presented in a random order every time')
     return parser
 
 
@@ -183,9 +183,9 @@ def load():
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
-    config = Config(args.config, data=args.data, out=args.out, filter_unlabeled=args.filter_unlabeled)
-    sav = SaveFile(config)
-    sav.load()
+    config = Config(args.config, data=args.data, out=args.out)
+    resume = not args.filter_unlabeled and not args.shuffle
+    sav = SaveFile(config, resume=resume)
 
     if not os.path.exists(config.out):
         save_dir = config.out.rsplit('/', maxsplit=1)[0]
@@ -202,6 +202,9 @@ def load():
             if args.filter_unlabeled and int(m.group('img_id')) in df.index:
                 continue
             img_list.append(file)
+
+    if args.shuffle:
+        shuffle(img_list)
 
     print('Loaded!')
     return config, sav, img_list, df

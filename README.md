@@ -32,6 +32,7 @@ The command allows optional flags `--data` and `--out` to specify the source dat
 - `--data`: directory with images. The name of the images must be their ID
 - `--out`: path and file name of the output csv file
 - `--filter_unlabeled`: skip already labeled images
+- `--shuffle`: images are shuffled every time
 
 ### config
 The file `config.json` contains the configuration for the task. It has the following structure:
