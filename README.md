@@ -9,22 +9,22 @@ Images are shown, and they are annotated when a key is pressed. If an image has 
 1. Download the repository.
 2. (Optional) Create an environment and activate it:
 
-```bash
-python -m venv venv
-source venv/bin/activate
-```
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
+    ```
 
 3. Install the dependencies:
 
-```bash
-pip install -r requirements.txt
-```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 4. Run `runnotate` using the following command from the root of the repository:
 
-```bash
-python runnotate --config path/to/config.json
-```
+    ```bash
+    python runnotate --config path/to/config.json
+    ```
 
 The command allows optional flags `--data` and `--out` to specify the source data folder and output file. Run `python runnotate -h` for help.
 
@@ -69,45 +69,45 @@ A `sav` file will be created in the same directory; it contains save information
 
 ## Example of use
 
-Example command:
+- Example command:
 
-```bash
-python runnotate --config data/config.json --data data/reduced_coco_1000 --out out/annotations.csv
-```
+    ```bash
+    python runnotate --config data/config.json --data data/reduced_coco_1000 --out out/annotations.csv
+    ```
 
-Example `config.json`:
+- Example `config.json`:
 
-```json
-{
-  "labels": {
-    "young": {
-      "keys": ["y"],
-      "color": "#00ff00"
-    },
-    "old": {
-      "keys": ["o"],
-      "color": "#0000ff"
-    },
-    "none": {
-      "keys": ["n"],
-      "color": "#ff0000"
+    ```json
+    {
+      "labels": {
+        "young": {
+          "keys": ["y"],
+          "color": "#00ff00"
+        },
+        "old": {
+          "keys": ["o"],
+          "color": "#0000ff"
+        },
+        "none": {
+          "keys": ["n"],
+          "color": "#ff0000"
+        }
+      },
+      "controls": {
+        "back": ["Backspace"],
+        "next": ["Spacebar"],
+        "quit": ["q", "Esc"]
+      },
+      "data": "data/reduced_coco_1000",
+      "out": "out/annotations.csv"
     }
-  },
-  "controls": {
-    "back": ["Backspace"],
-    "next": ["Spacebar"],
-    "quit": ["q", "Esc"]
-  },
-  "data": "data/reduced_coco_1000",
-  "out": "out/annotations.csv"
-}
-```
+    ```
 
-Example output csv:
+- Example output csv:
 
-```csv
-,id, label
-1,493022,old
-2,301241,old
-3,39630,young
-```
+    ```csv
+    ,id, label
+    1,493022,old
+    2,301241,old
+    3,39630,young
+    ```
