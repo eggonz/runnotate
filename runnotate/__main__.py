@@ -8,19 +8,55 @@ import cv2
 import pandas as pd
 
 WINDOW_NAME = 'runnotate'
-IMG_REGEX = r'^(?P<img_id>\d+)\.[^\.]*$'
 DEFAULT_CONFIG = 'config.json'
 
 
 class Config:
     key2int = {
-        'Y': 121,
-        'O': 111,
-        'N': 110,
-        'Q': 113,
-        'SPACE': 32,
-        'BACK': 8,
-        'ESC': 27,
+        '0': 48,
+        '1': 49,
+        '2': 50,
+        '3': 51,
+        '4': 52,
+        '5': 53,
+        '6': 54,
+        '7': 55,
+        '8': 56,
+        '9': 57,
+
+        'a': 97,
+        'b': 98,
+        'c': 99,
+        'd': 100,
+        'e': 101,
+        'f': 102,
+        'g': 103,
+        'h': 104,
+        'i': 105,
+        'j': 106,
+        'k': 107,
+        'l': 108,
+        'm': 109,
+        'n': 110,
+        'o': 111,
+        'p': 112,
+        'q': 113,
+        'r': 114,
+        's': 115,
+        't': 116,
+        'u': 117,
+        'v': 118,
+        'w': 119,
+        'x': 120,
+        'y': 121,
+        'z': 122,
+
+        'Backspace': 8,
+        'Tab': 9,
+        'Enter': 13,
+        'Esc': 27,
+        'Spacebar': 32,
+        'Delete': 127,
     }
 
     def __init__(self, path, *, data='', out=''):
@@ -70,7 +106,7 @@ class Config:
 
 class SaveFile:
     def __init__(self, config):
-        self._filename = re.sub(r'\.[^\.]*$', '.sav', config.out)
+        self._filename = re.sub(r'\.[^.]*$', '.sav', config.out)
 
         self.stamp = 0
         self.load()
@@ -113,7 +149,7 @@ def load():
     config = Config(args.config, data=args.data, out=args.out)
     sav = SaveFile(config)
 
-    img_list = [file for file in os.listdir(config.data) if re.match(IMG_REGEX, file)]
+    img_list = [file for file in os.listdir(config.data) if re.match(r'^\d+\.[^.]*$', file)]
 
     if not os.path.exists(config.out):
         save_dir = config.out.rsplit('/', maxsplit=1)[0]
@@ -136,7 +172,7 @@ def run(config, sav, img_list, df):
     while True:
         i = i % len(img_list)
         filename = img_list[i]
-        m = re.match(IMG_REGEX, filename)
+        m = re.match(r'^(?P<img_id>\d+)\.[^.]*$', filename)
         if not m:
             print('Error, invalid type')
             break
