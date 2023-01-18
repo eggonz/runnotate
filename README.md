@@ -2,6 +2,8 @@
 
 Tool for quick image annotation.
 
+Images are shown, and they are annotated when a key is pressed. If an image has a defined annotation, it will be represented with a colored frame. Labelling and control keys are specified in a configuration file.
+
 ## Setup
 
 1. Download the repository.
@@ -36,20 +38,28 @@ The file `config.json` contains the configuration for the task. It has the follo
 ```json
 {
   "labels": {
-    "label1": [...],
-    "label2": [...]
+    "label1": {
+      "keys": [],
+      "color": "#000000"
+    },
+    "label2": {
+      "keys": [],
+      "color": "#000000"
+    }
   },
   "controls": {
-    "control1": [...]
+    "back": [],
+    "next": [],
+    "quit": []
   },
   "data": "",
   "out": ""
 }
 ```
 
-Each of the labels contains a list of the keys for each class. The necessary controls are also specified with their corresponding keys.
+Each of the labels contains a list of the keys for each class. A color representation is specified for annotation visualization. The necessary controls are also specified with their corresponding keys.
 
-The data and output paths are specified here. If any of the values is specified when running the command in terminal, the value in `config.json` will be ignored.
+The data and output paths can be defined here. If any of the values is specified when running the command in terminal, the value in `config.json` will be ignored.
 
 ## Output
 
@@ -70,9 +80,18 @@ Example `config.json`:
 ```json
 {
   "labels": {
-    "young": ["y"],
-    "old": ["o"],
-    "none": ["n"]
+    "young": {
+      "keys": ["y"],
+      "color": "#00ff00"
+    },
+    "old": {
+      "keys": ["o"],
+      "color": "#0000ff"
+    },
+    "none": {
+      "keys": ["n"],
+      "color": "#ff0000"
+    }
   },
   "controls": {
     "back": ["Backspace"],
