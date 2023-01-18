@@ -166,7 +166,7 @@ def load():
     config = Config(args.config, data=args.data, out=args.out)
     sav = SaveFile(config)
 
-    img_list = [file for file in os.listdir(config.data) if re.match(r'^\d+\.[^.]*$', file)]
+    img_list = [file for file in sorted(os.listdir(config.data)) if re.match(r'^\d+\.[^.]*$', file)]
 
     if not os.path.exists(config.out):
         save_dir = config.out.rsplit('/', maxsplit=1)[0]
@@ -240,7 +240,7 @@ def save(config, sav, df):
     if df is None or df.empty:
         print('Nothing to save')
         return
-    df.to_csv(config.out, index_label='id')
+    df.sort_index().to_csv(config.out, index_label='id')
 
     sav.save()
 
