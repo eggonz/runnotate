@@ -87,6 +87,7 @@ class Config:
                 self._int2label[ASCII.get(key, -1)] = label
 
         self._data = config_file['data'] if not data else data
+        self._data = self._data.rstrip('/')
         self._out = config_file['out'] if not out else out
 
     @property
